@@ -5,7 +5,6 @@ from agentes.avaliador_ideias import criar_avaliador_ideias
 from agentes.prototipador import criar_prototipador
 from agentes.analista_financeiro import criar_analista_financeiro
 
-
 from tarefas.tarefas_gerente import criar_tarefa_plano_mestre, criar_tarefa_coordenacao
 from tarefas.tarefas_facilitador import criar_tarefa_planejamento_sessao, criar_tarefa_conducao_sessao, \
     criar_tarefa_documentacao_ideias
@@ -15,7 +14,6 @@ from tarefas.tarefas_prototipador import criar_tarefa_planejamento_prototipo, cr
     criar_tarefa_teste_inicial
 from tarefas.tarefas_analista_financeiro import criar_tarefa_analise_viabilidade, criar_tarefa_modelagem_negocios, \
     criar_tarefa_recomendacoes_investimento
-
 
 from config.config import obter_config
 from utils.helpers import salvar_resultado, formatar_ideias, gerar_grafico_avaliacoes, calcular_metricas_inovacao
@@ -32,7 +30,6 @@ def criar_equipe_inovacao():
     avaliador = criar_avaliador_ideias()
     prototipador = criar_prototipador()
     analista_financeiro = criar_analista_financeiro()
-
 
     tarefas = [
         criar_tarefa_plano_mestre(gerente),
@@ -74,9 +71,27 @@ def main():
         ideias_avaliadas = resultado.get('ideias_avaliadas', [])
 
         logging.info(f"Total de ideias geradas: {len(ideias_geradas)}")
-        logging.info("Top 5 ideias avaliadas:")
-        for i, ideia in enumerate(ideias_avaliadas[:5], 1):
-            logging.info(f"{i}. {ideia['nome']} - Pontuação: {ideia['pontuacao']}")
+
+        if ideias_geradas:
+            logging.info("Ideias geradas:")
+            ideias_formatadas = formatar_ideias(ideias_geradas)
+            logging.info(ideias_formatadas)
+        else:
+            logging.info("Nenhuma ideia foi gerada.")
+
+        if ideias_avaliadas:
+            logging.info("\nTop 5 ideias avaliadas:")
+            top_5_ideias = ideias_avaliadas[:5]
+            for i, ideia in enumerate(top_5_ideias, 1):
+                logging.info(f"{i}. {ideia['nome']} - Pontuação: {ideia['pontuacao']}")
+
+            logging.info("\nDetalhes das top 5 ideias:")
+            ideias_detalhadas = [f"{ideia['nome']}:\n{ideia.get('descricao', 'Sem descrição disponível.')}" for ideia in
+                                 top_5_ideias]
+            ideias_formatadas = formatar_ideias(ideias_detalhadas)
+            logging.info(ideias_formatadas)
+        else:
+            logging.info("Nenhuma ideia foi avaliada.")
 
         # Gerar gráfico das avaliações
         gerar_grafico_avaliacoes(ideias_avaliadas)
