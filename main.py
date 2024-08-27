@@ -1,4 +1,3 @@
-import argparse
 import logging
 from crewai import Crew
 from agentes.gerente_inovacao import criar_gerente_inovacao
@@ -7,6 +6,8 @@ from agentes.avaliador_ideias import criar_avaliador_ideias
 from agentes.prototipador import criar_prototipador
 from agentes.analista_financeiro import criar_analista_financeiro
 from agentes.especialista_implementacao import criar_especialista_implementacao
+from agentes.pesquisador_tendencias import criar_pesquisador_tendencias
+from agentes.especialista_etica import criar_especialista_etica
 
 from tarefas.tarefas_gerente import criar_tarefa_plano_mestre, criar_tarefa_coordenacao
 from tarefas.tarefas_facilitador import criar_tarefa_planejamento_sessao, criar_tarefa_conducao_sessao, \
@@ -19,6 +20,10 @@ from tarefas.tarefas_analista_financeiro import criar_tarefa_analise_viabilidade
     criar_tarefa_recomendacoes_investimento
 from tarefas.tarefas_especialista_implementacao import criar_tarefa_plano_implementacao, \
     criar_tarefa_analise_impacto_organizacional, criar_tarefa_estrategia_gestao_mudancas
+from tarefas.tarefas_pesquisador_tendencias import criar_tarefa_identificar_tendencias, \
+    criar_tarefa_analisar_impacto_tendencias, criar_tarefa_recomendar_acoes
+from tarefas.tarefas_especialista_etica import criar_tarefa_avaliar_etica_ideias, \
+    criar_tarefa_desenvolver_diretrizes_eticas, criar_tarefa_plano_treinamento_etica
 
 from config.config import obter_config
 from utils.helpers import salvar_resultado, formatar_ideias, gerar_grafico_avaliacoes, calcular_metricas_inovacao, \
@@ -34,6 +39,8 @@ def criar_equipe_inovacao():
     prototipador = criar_prototipador()
     analista_financeiro = criar_analista_financeiro()
     especialista_implementacao = criar_especialista_implementacao()
+    pesquisador_tendencias = criar_pesquisador_tendencias()
+    especialista_etica = criar_especialista_etica()
 
     tarefas = [
         criar_tarefa_plano_mestre(gerente),
@@ -53,10 +60,17 @@ def criar_equipe_inovacao():
         criar_tarefa_plano_implementacao(especialista_implementacao),
         criar_tarefa_analise_impacto_organizacional(especialista_implementacao),
         criar_tarefa_estrategia_gestao_mudancas(especialista_implementacao),
+        criar_tarefa_identificar_tendencias(pesquisador_tendencias),
+        criar_tarefa_analisar_impacto_tendencias(pesquisador_tendencias),
+        criar_tarefa_recomendar_acoes(pesquisador_tendencias),
+        criar_tarefa_avaliar_etica_ideias(especialista_etica),
+        criar_tarefa_desenvolver_diretrizes_eticas(especialista_etica),
+        criar_tarefa_plano_treinamento_etica(especialista_etica),
     ]
 
     return Crew(
-        agents=[gerente, facilitador, avaliador, prototipador, analista_financeiro, especialista_implementacao],
+        agents=[gerente, facilitador, avaliador, prototipador, analista_financeiro, especialista_implementacao,
+                pesquisador_tendencias, especialista_etica],
         tasks=tarefas,
         verbose=True
     )
