@@ -8,7 +8,8 @@ load_dotenv()
 def obter_modelo_linguagem():
     return ChatOpenAI(
         model_name="gpt-4o-mini",
-        openai_api_key=os.getenv("OPENAI_API_KEY")
+        openai_api_key=os.getenv("OPENAI_API_KEY"),
+        temperature=0.7
     )
 
 # Configurações globais do projeto
