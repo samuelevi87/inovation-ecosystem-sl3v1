@@ -8,6 +8,7 @@ from agentes.analista_financeiro import criar_analista_financeiro
 from agentes.especialista_implementacao import criar_especialista_implementacao
 from agentes.pesquisador_tendencias import criar_pesquisador_tendencias
 from agentes.especialista_etica import criar_especialista_etica
+from agentes.integrador_sistemas import criar_integrador_sistemas
 
 from tarefas.tarefas_gerente import criar_tarefa_plano_mestre, criar_tarefa_coordenacao
 from tarefas.tarefas_facilitador import criar_tarefa_planejamento_sessao, criar_tarefa_conducao_sessao, \
@@ -24,6 +25,9 @@ from tarefas.tarefas_pesquisador_tendencias import criar_tarefa_identificar_tend
     criar_tarefa_analisar_impacto_tendencias, criar_tarefa_recomendar_acoes
 from tarefas.tarefas_especialista_etica import criar_tarefa_avaliar_etica_ideias, \
     criar_tarefa_desenvolver_diretrizes_eticas, criar_tarefa_plano_treinamento_etica
+from tarefas.tarefas_integrador_sistemas import criar_tarefa_analise_arquitetura_atual, \
+    criar_tarefa_plano_integracao_inovacoes, criar_tarefa_prototipo_integracao, \
+    criar_tarefa_recomendacoes_arquitetura_futura
 
 from config.config import obter_config
 from utils.helpers import salvar_resultado, formatar_ideias, gerar_grafico_avaliacoes, calcular_metricas_inovacao, \
@@ -41,6 +45,7 @@ def criar_equipe_inovacao():
     especialista_implementacao = criar_especialista_implementacao()
     pesquisador_tendencias = criar_pesquisador_tendencias()
     especialista_etica = criar_especialista_etica()
+    integrador_sistemas = criar_integrador_sistemas()
 
     tarefas = [
         criar_tarefa_plano_mestre(gerente),
@@ -66,11 +71,15 @@ def criar_equipe_inovacao():
         criar_tarefa_avaliar_etica_ideias(especialista_etica),
         criar_tarefa_desenvolver_diretrizes_eticas(especialista_etica),
         criar_tarefa_plano_treinamento_etica(especialista_etica),
+        criar_tarefa_analise_arquitetura_atual(integrador_sistemas),
+        criar_tarefa_plano_integracao_inovacoes(integrador_sistemas),
+        criar_tarefa_prototipo_integracao(integrador_sistemas),
+        criar_tarefa_recomendacoes_arquitetura_futura(integrador_sistemas),
     ]
 
     return Crew(
         agents=[gerente, facilitador, avaliador, prototipador, analista_financeiro, especialista_implementacao,
-                pesquisador_tendencias, especialista_etica],
+                pesquisador_tendencias, especialista_etica, integrador_sistemas],
         tasks=tarefas,
         verbose=True
     )
